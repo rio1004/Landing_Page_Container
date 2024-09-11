@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import BottomDrawer from "./BottomDrawer";
+import { motion, Variants } from "framer-motion";
 
 type CardProps = {
   url: string;
@@ -9,6 +11,14 @@ type CardProps = {
   isFav: boolean;
 };
 
+const itemVariants: Variants = {
+  open: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 24 },
+  },
+  closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+};
 const Card = ({ url, title, isFav }: CardProps) => {
   const [favorite, setIsFav] = useState<string>("");
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -25,24 +35,35 @@ const Card = ({ url, title, isFav }: CardProps) => {
     console.log(fav);
     setIsFav(fav);
   };
+
+  const onEnter = () => {
+    setIsHovered(true);
+  };
+  const handleClose = () => {
+    setIsHovered(false);
+  };
   return (
     <div
       className="card flex justify-center flex-col items-center"
       onClick={() => showMoadal()}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => onEnter()}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="frameHolder relative">
         <iframe
-          className="rounded-3xl border-white border-2"
+          className="rounded-2xl border-white border-2"
           src={url}
           height="500px"
         >
           Your browser does not support iframes.
         </iframe>
-        {/* {isHovered && (
-          <div className="absolute w-[100%] h-[100%] bg-black rounded-3xl opacity-50 top-0 pointer-events-none "></div>
-        )}
+        <motion.div
+          variants={itemVariants}
+          animate={isHovered ? "open" : "closed"}
+        >
+          <BottomDrawer handleClose={handleClose} url={url} />
+        </motion.div>
+        {/* {isHovered && <BottomDrawer />}
         {} */}
       </div>
       <div className="description flex justify-between my-5 w-[80%] max-w-[280px]">
