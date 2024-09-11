@@ -1,5 +1,5 @@
-import CardHolder from "@/components/CardHolder.tsx";
-import Tabs from "../components/tabs.tsx";
+import CardHolder from "@/components/CardHolder";
+import Tabs from "../components/tabs";
 export default function Home() {
   return (
     <div className="p-14">
